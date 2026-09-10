@@ -1,0 +1,32 @@
+# List only the 10-15 cameras you're actively working with.
+# Add the rest later — nothing else in the pipeline needs to change.
+#
+# segment_seconds: length of each recorded chunk (start at 20s, tune later)
+# rtsp_transport: "tcp" is more reliable than "udp" on most factory networks
+
+global:
+  segment_seconds: 20
+  rtsp_transport: tcp
+  storage_root: /home/prateek/video_pipeline/storage/chunks
+  process_fps: 5          # frames/sec sampled by GPU worker, not the recording fps
+  reconnect_delay_sec: 5
+
+cameras:
+  - id: cam10
+    name: "Channel 10"
+    rtsp_url: "rtsp://admin123:Admin%40123@192.168.1.245:554/cam/realmonitor?channel=10&subtype=1"
+    enabled: true
+
+  # This looks like a Dahua/Hikvision NVR — other cameras are very likely
+  # channel=1 .. channel=25 on the SAME host/credentials. If so, just copy
+  # the line above and change the channel number, e.g.:
+  #
+  # - id: cam01
+  #   name: "Channel 1"
+  #   rtsp_url: "rtsp://admin123:Admin%40123@192.168.1.245:554/cam/realmonitor?channel=1&subtype=1"
+  #   enabled: true
+  #
+  # subtype=1 = sub-stream (lower res, lighter on ingestion — good for testing/detection)
+  # subtype=0 = main stream (full res — switch to this if you need higher accuracy)
+
+  # ... add up to 15. Set enabled: false to keep a camera defined but paused.
